@@ -1,0 +1,51 @@
+{{ block "index" . }}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/htmx.org@1.9.11"
+        integrity="sha384-0gxUXCCR8yv9FM2b+U3FDbsKthCI66oH5IA9fHppQq9DDMHuMauqq1ZHBpJxQ0J0"
+        crossorigin="anonymous"></script>
+    <title>Document Manager</title>
+</head>
+
+<body>
+    <form action="/pdf" method="post" enctype="multipart/form-data">
+        <input name="pdfname" type="text" value="test">
+        <input id="imageInput" name="images" type="file" multiple accept=".png, .jpg, .jpeg">
+        <button type="submit">Create PDF</button>
+    </form>
+
+    <div id="imagePreview"></div>
+
+    <script>
+        document.getElementById('imageInput').addEventListener('change', function (event) {
+            const preview = document.getElementById('imagePreview');
+            preview.innerHTML = ''; // Clear previous preview
+
+            const files = event.target.files; // Get selected files
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader(); // Create a FileReader object
+
+                reader.onload = function (e) {
+                    // Create an img element and set its src to the data URL obtained from reading the file
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.maxWidth = '200px'; // Limit image width for better presentation
+                    preview.appendChild(img); // Append the image to the preview div
+                }
+
+                reader.readAsDataURL(file); // Read the file as a data URL
+            }
+        });
+    </script>
+</body>
+
+</html>
+{{end}}
+
+{{ block "count" .}}
+
+{{ end }}
